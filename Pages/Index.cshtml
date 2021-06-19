@@ -1,0 +1,79 @@
+﻿@page
+@using RazorSummerVacationFlights.Models
+@model IndexModel
+@{
+    ViewData["Title"] = "Razor Summer Vacation Flights";
+}
+@{string curCountry = string.Empty;}
+
+<div class="text-center">
+   <h1>View all season flights</h1>
+   <p>Season from @ViewData["startSeasonDate"] to @ViewData["endSeasonDate"]</p>
+   <p>@ViewData["timespan"]</p>
+</div>
+<div>
+   @if (ViewData["flights"] != null){
+        <table class="table">
+
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => (model.ViewData["flights"] as List<FlightToVacationPlace>)[0].DestinationCountry)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => (model.ViewData["flights"] as List<FlightToVacationPlace>)[0].Price)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => (model.ViewData["flights"] as List<FlightToVacationPlace>)[0].DepartureDateOutbound)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => (model.ViewData["flights"] as List<FlightToVacationPlace>)[0].DepartureDateInbound)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => (model.ViewData["flights"] as List<FlightToVacationPlace>)[0].ActiveCovidCases)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewData["flights"] as List<FlightToVacationPlace>)
+                {
+                    <tr>
+                        @if (curCountry.CompareTo(item.DestinationCountry) != 0)
+                        {
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DestinationCountry)
+                            </td>
+                        } else
+                        {
+                            <td></td>
+                        }
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DepartureDateOutbound)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DepartureDateInbound)
+                        </td>
+                        @if (curCountry.CompareTo(item.DestinationCountry) != 0)
+                        {
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ActiveCovidCases)
+                            </td>
+                            curCountry = item.DestinationCountry;
+                        } else
+                        {
+                            <td></td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+   else
+    {
+        <h4>No data found</h4>
+    }
+</div>
